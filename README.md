@@ -28,7 +28,7 @@ $ cat about.txt
 ```
 
 ```
-Name     : [Your Name]
+Name     : Will Jones
 Location : UK 🇬🇧
 Status   : Perpetually in rabbit holes
 Focus    : IoT, Home Lab, Cyber Security & Web Dev
