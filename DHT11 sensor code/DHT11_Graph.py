@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 data = pd.read_csv('DHT11_log.csv')
 
 x = data["Timestamp"] 
-y1 = data['Temperature']
-y2 = data['Humidity']
+y1 = data['avg_temp']
+y2 = data['avg_humidity']
 
 plt.plot (x,y1, label = 'Temperature'   )
 plt.plot (x,y2, label = 'Humidity'    )
