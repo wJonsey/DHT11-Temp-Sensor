@@ -2,9 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+#read csv
 df = pd.read_csv('DHT11_log.csv')
 
-#30 minute conversion for timestamp every 30 minutes
+#setting timestamp to be every 30 minutes
 df["Timestamp"] = pd.to_datetime(df["Timestamp"])
 plt.gca().xaxis.set_major_locator(mdates.MinuteLocator(interval=30))
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
