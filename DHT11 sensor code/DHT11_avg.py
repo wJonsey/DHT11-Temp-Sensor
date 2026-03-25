@@ -1,21 +1,21 @@
-                             
 import time
 import board
 import adafruit_dht
 import csv
 from datetime import datetime
 
-# File name
+# CSV file name
 filename = "DHT11_log.csv"
 
-# Create file with headers if it doesn't exist
+# Create CSV with headers if it doesn't exist
 try:
     with open(filename, "x", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["Timestamp", "avg_temp", "avg_humidity"])
 except FileExistsError:
     pass
-                                    
+
+# Setup DHT11 on GPIO17 (pin 11)
 dht_device = adafruit_dht.DHT11(board.D17)
 
 try:
@@ -25,41 +25,41 @@ try:
 
         start_time = time.time()
 
-        # Collect readings for 40 seconds
-        try:
-            temp = dht_device.temperature
-            hum = dht_device.humidity
+        # Get integer seconds only
+        current_seconds = int(time.time()) 
 
-            if temp is not None and hum is not None:
-                # Optional: filter unrealistic values
-                if 0 <= temp <= 50 and 20 <= hum <= 90:
+        # Trigger the block when seconds % 40 == 0
+        if current_seconds % 40 == 0:
+            try:
+                temp = dht_device.temperature
+                hum = dht_device.humidity
+
+                if temp is not None and hum is not None:
                     temp_readings.append(temp)
                     hum_readings.append(hum)
 
-        except RuntimeError:
-            # DHT11 errors are common — ignore and continue
-            pass
+            except RuntimeError:
+                pass
 
-        time.sleep(2)
+            # Compute averages
+            if temp_readings and hum_readings:
+                avg_temp = round(sum(temp_readings) / len(temp_readings), 2)
+                avg_hum = round(sum(hum_readings) / len(hum_readings), 2)
 
-        # Process results
-        if temp_readings and hum_readings:
-            avg_temp = round(sum(temp_readings) / len(temp_readings),2)
-            avg_hum = round(sum(hum_readings) / len(hum_readings),2)
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                print(f"40s Avg Temp: {avg_temp:.2f}°C  Avg Humidity: {avg_hum:.2f}%")
+                # Save to CSV with full timestamp
+                with open(filename, "a", newline="") as f:
+                    writer = csv.writer(f)
+                    writer.writerow([timestamp, avg_temp, avg_hum])
 
-            print(f"40s Avg Temp: {avg_temp:.2f}°C  Avg Humidity: {avg_hum:.2f}%")
+            else:
+                print("No valid readings collected in 40 seconds")
 
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print("-" * 40)
 
-            # Save to CSV
-            with open(filename, "a", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow([timestamp,avg_temp,avg_hum])
-
-        else:
-            print("No valid readings collected in 40 seconds")
-
-        print("-" * 40)
+            # Wait before checking seconds again to avoid multiple triggers
+            time.sleep(1)
 
 except KeyboardInterrupt:
     print("Stopping program...")
