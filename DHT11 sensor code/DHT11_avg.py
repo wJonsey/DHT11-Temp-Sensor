@@ -14,16 +14,13 @@ filename = "DHT11_log.csv"
 def safe_write_row(main_file, row):
     temp_file = "temp_log.csv"
 
-    # Step 1: write to temp file
     with open(temp_file, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(row)
 
-    # Step 2: append temp file to main file
     with open(main_file, "a", newline="") as main, open(temp_file, "r") as temp:
         main.write(temp.read())
 
-    # Step 3: remove temp file
     os.remove(temp_file)
 
 
