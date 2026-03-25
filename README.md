@@ -46,13 +46,9 @@ Location : UK 🇬🇧
 <div align="center">
 
 ```
-┌─────────────────────────────────────────────────┐
-│  "It's not about being the best.                │
-│   It's about being better than yesterday."      │
-└─────────────────────────────────────────────────┘
 ```
 
-![Visitor Count](https://komarev.com/ghpvc/?username=yourusername&color=00ff41&style=flat-square&label=Profile+Views)
+![Visitor Count](https://komarev.com/ghpvc/?20188948=20188948&color=00ff41&style=flat-square&label=Profile+Views)
 
 </div>
 
