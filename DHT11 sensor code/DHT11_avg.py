@@ -26,22 +26,21 @@ try:
         start_time = time.time()
 
         # Collect readings for 40 seconds
-        while (time.time() - start_time) < 40:
-            try:
-                temp = dht_device.temperature
-                hum = dht_device.humidity
+        try:
+            temp = dht_device.temperature
+            hum = dht_device.humidity
 
-                if temp is not None and hum is not None:
-                    # Optional: filter unrealistic values
-                    if 0 <= temp <= 50 and 20 <= hum <= 90:
-                        temp_readings.append(temp)
-                        hum_readings.append(hum)
+            if temp is not None and hum is not None:
+                # Optional: filter unrealistic values
+                if 0 <= temp <= 50 and 20 <= hum <= 90:
+                    temp_readings.append(temp)
+                    hum_readings.append(hum)
 
-            except RuntimeError:
-                # DHT11 errors are common — ignore and continue
-                pass
+        except RuntimeError:
+            # DHT11 errors are common — ignore and continue
+            pass
 
-            time.sleep(2)
+        time.sleep(2)
 
         # Process results
         if temp_readings and hum_readings:
