@@ -1,56 +1,114 @@
-<!-- ═══════════════════════════════════════════════════════════════════════════ -->
-<!--                        GITHUB PROFILE README                              -->
-<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+# 🌡️ Raspberry Pi DHT11 Temperature & Humidity Monitor
 
-<div align="center">
-
-```
- ██╗  ██╗ ██████╗ ███╗   ███╗███████╗    ██╗      █████╗ ██████╗
- ██║  ██║██╔═══██╗████╗ ████║██╔════╝    ██║     ██╔══██╗██╔══██╗
- ███████║██║   ██║██╔████╔██║█████╗      ██║     ███████║██████╔╝
- ██╔══██║██║   ██║██║╚██╔╝██║██╔══╝      ██║     ██╔══██║██╔══██╗
- ██║  ██║╚██████╔╝██║ ╚═╝ ██║███████╗    ███████╗██║  ██║██████╔╝
- ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝    ╚══════╝╚═╝  ╚═╝╚═════╝
-```
-
-### `> Tinkerer · Builder · Breaker · Learner`
-
-![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=00FF41&background=000000&center=true&vCenter=true&width=600&lines=IoT+%7C+Home+Lab+%7C+Cyber+Security;Web+Dashboards+%7C+Python+%7C+HTML;Ethical+Hacking+%7C+CTFs+%7C+Networking;Always+Learning%2C+Always+Breaking+Things)
-
-</div>
+A lightweight project that uses a Raspberry Pi and DHT11 sensor to read and display real-time temperature and humidity data.
 
 ---
 
-## 👾 `whoami`
+## 📌 Overview
+
+This project demonstrates how to interface a DHT11 sensor with a Raspberry Pi to collect environmental data. It’s ideal for beginners learning GPIO, sensor integration, and basic Python scripting.
+
+---
+
+## 🧰 Hardware Requirements
+
+* Raspberry Pi (any model with GPIO support)
+* DHT11 Temperature & Humidity Sensor
+* 10kΩ resistor (if not included with sensor module)
+* Jumper wires
+* Breadboard (optional)
+
+---
+
+## 🔌 Wiring Diagram
+
+| DHT11 Pin  | Connect To Raspberry Pi |
+| ---------- | ----------------------- |
+| VCC (+)    | 3.3V (Pin 1)            |
+| DATA (OUT) | GPIO4 (Pin 7)           |
+| GND (–)    | GND (Pin 6)             |
+
+> ⚠️ Note: Use a 10kΩ pull-up resistor between VCC and DATA if your sensor does not include one.
+
+---
+
+## 💻 Software Setup
+
+### 1. Update your system
 
 ```bash
-$ cat about.txt
+sudo apt update && sudo apt upgrade -y
 ```
 
-```
-Name     : Will Jones
-Location : UK 🇬🇧
+### 2. Install dependencies
+
+```bash
+pip install Adafruit_DHT
 ```
 
 ---
-<div align="center">
 
-[![TryHackMe](https://img.shields.io/badge/TryHackMe-Profile-212C42?style=for-the-badge&logo=tryhackme)](https://tryhackme.com/p/wJonsey)
-[![HackTheBox](https://img.shields.io/badge/HackTheBox-Profile-9FEF00?style=for-the-badge&logo=hackthebox&logoColor=black)](https://app.hackthebox.com/profile/wJonsey)
+## ▶️ Usage
 
-</div>
+Create a Python script (e.g., `main.py`) and add:
+
+```python
+import Adafruit_DHT
+
+sensor = Adafruit_DHT.DHT11
+pin = 4  # GPIO4
+
+humidity, temperature = Adafruit_DHT.read(sensor, pin)
+
+if humidity is not None and temperature is not None:
+    print(f"Temperature: {temperature}°C")
+    print(f"Humidity: {humidity}%")
+else:
+    print("Failed to retrieve data from sensor")
+```
+
+Run the script:
+
+```bash
+python main.py
+```
 
 ---
 
-<div align="center">
+## 📊 Example Output
 
 ```
+Temperature: 23°C
+Humidity: 55%
 ```
 
-![Visitor Count](https://komarev.com/ghpvc/?20188948=20188948&color=00ff41&style=flat-square&label=Profile+Views)
+---
 
-</div>
+## ⚠️ Troubleshooting
 
-<!-- ═══════════════════════════════════════════════════════════════════════════ -->
-<!--  Remember to replace 'yourusername' and '[Your Name]' with your details!  -->
-<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+* Ensure correct wiring (especially DATA pin)
+* Check that the sensor is powered (3.3V recommended)
+* Verify GPIO pin number in code matches your wiring
+* Some readings may fail occasionally — this is normal for DHT11 sensors
+
+---
+
+## 🚀 Future Improvements
+
+* Log data to a file or database
+* Display readings on a web dashboard
+* Add support for DHT22 (higher accuracy)
+* Integrate with IoT platforms (e.g., MQTT, Home Assistant)
+
+---
+
+## 📄 License
+
+This project is open-source and available under the MIT License.
+
+---
+
+## 🙌 Acknowledgements
+
+* Adafruit DHT library
+* Raspberry Pi Foundation documentation
