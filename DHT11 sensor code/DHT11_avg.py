@@ -7,7 +7,7 @@ import os
 
 
 
-# CSV file name
+# CSV
 filename = "DHT11_log.csv"
 
 
@@ -24,7 +24,7 @@ def safe_write_row(main_file, row):
     os.remove(temp_file)
 
 
-# Create CSV with headers if it doesn't exist
+# Create CSV 
 try:
     with open(filename, "x", newline="") as f:
         writer = csv.writer(f)
@@ -32,8 +32,8 @@ try:
 except FileExistsError:
     pass
 
-# Setup DHT11 on GPIO17 (pin 11)
-dht_device = adafruit_dht.DHT11(board.D17)
+# GPIO 27
+dht_device = adafruit_dht.DHT11(board.D27)
 
 try:
     while True:
@@ -42,10 +42,10 @@ try:
 
         start_time = time.time()
 
-        # Get integer seconds only
+        # seconds only
         current_seconds = int(time.time()) 
 
-        # Trigger the block when seconds % 40 == 0
+        # every 40 seconds
         if current_seconds % 40 == 0:
             try:
                 temp = dht_device.temperature
@@ -58,7 +58,7 @@ try:
             except RuntimeError:
                 pass
 
-            # Compute averages
+            #averages
             if temp_readings and hum_readings:
                 avg_temp = round(sum(temp_readings) / len(temp_readings), 2)
                 avg_hum = round(sum(hum_readings) / len(hum_readings), 2)
@@ -73,7 +73,7 @@ try:
 
             print("-" * 40)
 
-            # Wait before checking seconds again to avoid multiple triggers
+            # waits
             time.sleep(1)
 
 except KeyboardInterrupt:
