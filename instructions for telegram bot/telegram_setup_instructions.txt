@@ -1,0 +1,107 @@
+================================================================
+  TELEGRAM BOT SETUP — MILDEW MONITOR ALERTS
+================================================================
+
+WHAT YOU NEED
+-------------
+- Your phone with Telegram installed
+- Your Raspberry Pi running the mildew monitor
+- About 5 minutes
+
+----------------------------------------------------------------
+
+STEP 1 — CREATE YOUR BOT
+-------------------------
+1. Open Telegram on your phone
+2. In the search bar, type:  @BotFather
+3. Tap the result and press START
+4. Send the message:  /newbot
+5. BotFather will ask for a name — type anything e.g.  Mildew Monitor
+6. It will then ask for a username — must end in "bot" e.g.  mildew_monitor_bot
+7. BotFather will reply with your Bot Token. It looks like this:
+      123456789:ABCdefGHIjklMNOpqrSTUvwxYZ
+8. Copy that token and keep it safe — you will need it shortly
+
+
+STEP 2 — GET YOUR CHAT ID
+--------------------------
+1. In Telegram, search for the bot you just created (by its username)
+2. Press START and send it any message — just type "hello"
+3. On your Pi (or any browser), visit this URL — replace YOUR_TOKEN:
+      https://api.telegram.org/botYOUR_TOKEN/getUpdates
+   Example:
+      https://api.telegram.org/bot123456789:ABCdef.../getUpdates
+4. You will see a block of JSON text. Look for this section:
+      "chat": { "id": 987654321 ...}
+5. The number after "id" is your Chat ID — copy it
+
+
+STEP 3 — ADD YOUR DETAILS TO THE CODE
+--------------------------------------
+Open mildew_monitor.py and find these two lines near the top:
+
+    TELEGRAM_TOKEN   = "YOUR_BOT_TOKEN"
+    TELEGRAM_CHAT_ID = "YOUR_CHAT_ID"
+
+Replace them with your real values, for example:
+
+    TELEGRAM_TOKEN   = "123456789:ABCdefGHIjklMNOpqrSTUvwxYZ"
+    TELEGRAM_CHAT_ID = "987654321"
+
+Save the file.
+
+
+STEP 4 — INSTALL THE REQUESTS LIBRARY (if not already installed)
+-----------------------------------------------------------------
+Run this on your Pi:
+
+    pip install requests
+
+
+STEP 5 — TEST IT
+----------------
+Run the monitor as normal:
+
+    python mildew_monitor.py
+
+When the risk score hits 50 or above you will receive a Telegram
+message on your phone automatically.
+
+To do a quick test without waiting for a real reading, temporarily
+change the risk_score() function to return 90, run the script,
+then change it back.
+
+
+----------------------------------------------------------------
+
+HOW THE ALERTS WORK
+--------------------
+  Risk below 50  →  No message (normal conditions)
+  Risk 50 to 79  →  One "Moderate risk" warning sent
+  Risk 80+       →  One "Critical risk" alert sent
+
+The code will NOT spam you — it only sends a new message when the
+risk level changes (e.g. goes from low to moderate, or moderate
+to critical). Once the risk drops back below 50 it resets, so
+you will be alerted again if it rises once more.
+
+
+----------------------------------------------------------------
+
+TROUBLESHOOTING
+---------------
+No message received?
+  - Double-check your token and chat ID have no extra spaces
+  - Make sure you sent a message to your bot in Step 2
+    (Telegram bots cannot message you first until you do)
+  - Check your Pi has internet access
+
+"getUpdates" page shows empty results?
+  - Go back to Telegram, find your bot, and send it a message
+  - Then refresh the getUpdates URL
+
+Bot token not working?
+  - Go back to @BotFather, send /mybots, select your bot,
+    then API Token to view or regenerate it
+
+================================================================

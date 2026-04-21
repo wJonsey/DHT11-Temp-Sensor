@@ -1,115 +1,111 @@
-# 🌡️ Raspberry Pi DHT11 Temperature & Humidity Monitor
+# 🍓 DHT11 Strawberry Mildew Monitor
 
-A lightweight project that uses a Raspberry Pi and DHT11 sensor to read and display real-time temperature and humidity data.
-
----
-
-## 📌 Overview
-
-This project demonstrates how to interface a DHT11 sensor with a Raspberry Pi to collect environmental data. It’s ideal for beginners learning GPIO, sensor integration, and basic Python scripting.
+A lightweight Flask dashboard that reads live temperature and humidity from a DHT11 sensor and calculates the risk of **Powdery Mildew** on strawberry crops. Runs on any Raspberry Pi with a DHT11 sensor attached.
 
 ---
 
-## 🧰 Hardware Requirements
+## Features
 
-* Raspberry Pi (any model with GPIO support)
-* DHT11 Temperature & Humidity Sensor
-* 10kΩ resistor (if not included with sensor module)
-* Jumper wires
-* Breadboard (optional)
-
----
-
-## 🔌 Wiring Diagram
-
-| DHT11 Pin  | Connect To Raspberry Pi |
-| ---------- | ----------------------- |
-| VCC (+)    | 3.3V (Pin 1)            |
-| DATA (OUT) | GPIO4 (Pin 7)           |
-| GND (–)    | GND (Pin 6)             |
-
-> ⚠️ Note: Use a 10kΩ pull-up resistor between VCC and DATA if your sensor does not include one.
+- 📊 **Live web dashboard** — auto-refreshes every 3 seconds, no CSV or database needed
+- 🌿 **Mildew risk score** — calculates a 0–100 risk index based on real sensor readings
+- 📱 **Telegram alerts** — sends instant free notifications to your phone when risk is elevated
+- 🎨 **Visual dashboard** — dark botanical UI with colour-coded risk meter and status banner
+- ⚡ **Lightweight** — runs entirely on the Pi, no cloud services required
 
 ---
 
-## 💻 Software Setup
+## How It Works
 
-### 1. Update your system
+The sensor reads temperature and humidity every 3 seconds. A simple risk model scores conditions:
 
+| Condition | Risk Score |
+|---|---|
+| Temperature below 14°C | 20 — Low |
+| Humidity below 82% | 60 — Moderate |
+| Humidity 82%+ (warm) | 90 — Critical |
+
+When the risk crosses a threshold, a Telegram message is sent to your phone. Alerts are smart — they won't spam you, only firing once per risk level change.
+
+---
+
+## Hardware Required
+
+- Raspberry Pi (any model)
+- DHT11 temperature & humidity sensor
+- Sensor wired to **GPIO 17 and GPIO 27**
+
+---
+
+## Installation
+
+**1. Clone the repo**
 ```bash
-sudo apt update && sudo apt upgrade -y
+git clone https://github.com/20188948/DHT11-Temp-Sensor.git
+cd DHT11-Temp-Sensor
 ```
 
-### 2. Install dependencies
-### Download the requirements txt file
-
+**2. Install dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
----
+**3. Set up Telegram alerts** *(optional but recommended)*
 
-## ▶️ Test
+See [`telegram_setup_instructions.txt`](telegram_setup_instructions.txt) for a full step-by-step guide.
 
-Create a Python script (e.g., `main.py`) and add:
-
+Once you have your bot token and chat ID, open `mildew_monitor.py` and fill in:
 ```python
-import Adafruit_DHT
-
-sensor = Adafruit_DHT.DHT11
-pin = 4  # GPIO4
-
-humidity, temperature = Adafruit_DHT.read(sensor, pin)
-
-if humidity is not None and temperature is not None:
-    print(f"Temperature: {temperature}°C")
-    print(f"Humidity: {humidity}%")
-else:
-    print("Failed to retrieve data from sensor")
+TELEGRAM_TOKEN   = "YOUR_BOT_TOKEN"
+TELEGRAM_CHAT_ID = "YOUR_CHAT_ID"
 ```
 
-Run the script:
-
+**4. Run**
 ```bash
-python main.py
+python mildew_monitor.py
+```
+
+Then open a browser on any device on the same network and go to:
+```
+http://<your-pi-ip>:5000
 ```
 
 ---
 
-## 📊 Example Output
+## Dependencies
 
 ```
-Temperature: 23°C
-Humidity: 55%
+Adafruit_DHT
+adafruit-circuitpython-dht
+flask
+requests
+pandas
+matplotlib
+board
 ```
 
 ---
 
-## ⚠️ Troubleshooting
+## Dashboard Preview
 
-* Ensure correct wiring (especially DATA pin)
-* Check that the sensor is powered (3.3V recommended)
-* Verify GPIO pin number in code matches your wiring
-* Some readings may fail occasionally — this is normal for DHT11 sensors
+The dashboard shows live temperature, humidity, and a colour-coded risk meter that shifts from green → orange → red as conditions worsen.
 
----
-
-## 🚀 Future Improvements
-
-* Log data to a file or database
-* Display readings on a web dashboard
-* Add support for DHT22 (higher accuracy)
-* Integrate with IoT platforms (e.g., MQTT, Home Assistant)
+- **Green** — Low risk (score below 50)
+- **Orange** — Moderate risk (score 50–79)
+- **Red** — Critical risk (score 80+)
 
 ---
 
-## 📄 License
+## Project Structure
 
-This project is open-source and available under the MIT License.
+```
+DHT11-Temp-Sensor/
+├── mildew_monitor.py              # Main Flask app + sensor logic + Telegram alerts
+├── requirements.txt               # Python dependencies
+└── telegram_setup_instructions.txt  # Step-by-step Telegram bot guide
+```
 
 ---
 
-## 🙌 Acknowledgements
+## License
 
-* Adafruit DHT library
-* Raspberry Pi Foundation documentation
+MIT — free to use, modify, and distribute.
