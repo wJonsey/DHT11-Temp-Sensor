@@ -11,6 +11,7 @@ A lightweight Flask dashboard that reads live temperature and humidity from a DH
 - 📱 **Telegram alerts** — sends instant free notifications to your phone when risk is elevated
 - 🎨 **Visual dashboard** — dark botanical UI with colour-coded risk meter and status banner
 - ⚡ **Lightweight** — runs entirely on the Pi, no cloud services required
+- 🧾 **CSV data**   - stores all data in a csv file 
 
 ---
 
@@ -61,7 +62,8 @@ TELEGRAM_CHAT_ID = "YOUR_CHAT_ID"
 
 **4. Run**
 ```bash
-python mildew_monitor.py
+python telegram_web.py
+python DHT11_avg.py
 ```
 
 Then open a browser on any device on the same network and go to:
