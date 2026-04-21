@@ -1,0 +1,6 @@
+Adafruit_DHT
+adafruit-circuitpython-dht
+pandas
+matplotlib
+board
+flask

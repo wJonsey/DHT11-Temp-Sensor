@@ -41,14 +41,15 @@ sudo apt update && sudo apt upgrade -y
 ```
 
 ### 2. Install dependencies
+### Download the requirements txt file
 
 ```bash
-pip install Adafruit_DHT
+pip install -r requirements.txt
 ```
 
 ---
 
-## ▶️ Usage
+## ▶️ Test
 
 Create a Python script (e.g., `main.py`) and add:
 
